@@ -5,7 +5,9 @@ import { NavigationContainer } from '@react-navigation/native';
 
 import AuthStack from './AuthStack';
 import AppStack from './AppStack';
+
 import { AuthContext } from '../context/AuthContext';
+
 
 function AppNav() {
 
@@ -26,11 +28,13 @@ function AppNav() {
         {
             userToken !== null ? 
             <AppStack /> 
+           
             : 
             <AuthStack />
         }
         
     </NavigationContainer>
+           
   );
 }
 

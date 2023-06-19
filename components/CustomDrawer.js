@@ -14,7 +14,7 @@ const CustomDrawer = props => {
         <View style={{ flex:1 }}>
             <DrawerContentScrollView 
                 {...props}
-                contentContainerStyle={{ backgroundColor: '#60e972' }}
+                contentContainerStyle={{ backgroundColor: '#4daf84' }}
             >
             <ImageBackground
                 source={require('../assets/images/menu-bg.png')}
@@ -24,7 +24,7 @@ const CustomDrawer = props => {
                 style={{ height: 80, width: 80, borderRadius: 40, marginBottom: 10 }}
                 />
                 <Text style={{fontWeight:'bold', fontSize:16}}>{userInfo.name}</Text>
-                <Text style={{fontSize:14}}>HN: {userInfo.user_detail.hn}</Text>
+                <Text style={{fontSize:14}}>HN: {userInfo.hn}</Text>
             </ImageBackground>
             <View style={{ flex: 1, backgroundColor:'#fff', paddingTop: 10 }}>
                 <DrawerItemList {...props} />

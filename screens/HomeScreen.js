@@ -4,13 +4,13 @@ import {
   View, 
   Text, 
   Image, 
-  ScrollView, 
   Linking, 
   TouchableOpacity, 
   Alert, 
   FlatList, 
   Animated, 
-  ImageBackground 
+  StyleSheet,
+  ImageBackground
 } from 'react-native';
 
 import NetInfo from '@react-native-community/netinfo';
@@ -23,10 +23,16 @@ import { BASE_URL } from '../config';
 import axios from 'axios';
 
 import { AuthContext } from '../context/AuthContext';
+import { Feather } from '@expo/vector-icons';
+import { MotiView } from 'moti';
+import { Easing, color } from 'react-native-reanimated';
+
+const _size = 100;
+const _color = '#FF0000';
 
 const HomeScreen = ({ navigation }) => {
     
-const {userInfo} = useContext(AuthContext);
+const {userInfo, userDetail} = useContext(AuthContext);
 
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
@@ -95,9 +101,15 @@ const {userInfo} = useContext(AuthContext);
                             { text: 'Okay' }
                           ]);
                           return;
+                        }else{
+                            console.log(data);
+                            Alert.alert(data.data, [
+                                { text: 'Okay' }
+                              ]);
+                              return;
                         }
 
-                        console.log(data);
+                        
                         // console.log(res.patient_id);
                         // console.log(res.mapsLat);
                         // console.log(res.mapsLng);
@@ -158,48 +170,37 @@ const {userInfo} = useContext(AuthContext);
             id: 1,
             name: "ข้อมูลโรคประจำตัว/ยา",
             icon: icons.Treatment,
-            url: 'ComingScreen',
-         //   color: COLORS.yellow,
+            url: 'Coming',
         },
         {
             id: 2,
             name: "ข้อมูลตรวจสุขภาพประจำปี",
             icon: icons.Knowledge_of_disease,
-            url: 'Login',
-         
-        //    color: COLORS.lightBlue,
+            url: 'CheckUp',
         },
         {
             id: 3,
-            name: "ข้อมูลการสอนสุขศึกษา/เยี่ยมบ้าน",
+            name: "การสอนสุขศึกษา/เยี่ยมบ้าน",
             icon: icons.Suitable_food,
-          //  url: 'Suitable_food',
-            url: 'Null',
-         //   color: COLORS.darkgreen,
+            url: 'Coming',
         },
         {
             id: 4,
             name: "สถานพยาบาลใกล้เคียง",
             icon: icons.Nearby_Hospital,
-            //url: 'Nearby_Hospital',
-            url: 'Null',
-        //    color: COLORS.peach,
+            url: 'Coming',
         },
         {
             id: 5,
             name: "ความรู้เรื่องโรค",
             icon: icons.Exercise,
-           // url: 'Exercise',
-           url: 'Null',
-           // color: COLORS.purple,
+           url: 'Coming',
         },
         {
             id: 6,
             name: "ติดต่อสอบถาม",
             icon: icons.Knowledge_picture,
-            //url: 'Knowledge_picture',
-            url: 'Null',
-           // color: COLORS.red,
+            url: 'Coming',
         }
     ]
 
@@ -212,23 +213,39 @@ const {userInfo} = useContext(AuthContext);
             <View 
                 style={{
                     flexDirection: 'row',
-                   
                     justifyContent: 'space-between',
                     alignItems: 'flex-end',
-                    paddingHorizontal: 22,
+                    paddingHorizontal: 10,
                     backgroundColor: '#FFFFFF',
                     height: 80,
 
                 }}
             >
-           
-                <Text style={{fontWeight:'bold', fontSize:18}}>สวัสดี, {userInfo.user_detail.first_name}</Text>
-              <TouchableOpacity onPress={() => navigation.openDrawer()}>
-                <ImageBackground 
-                  source={ require('../assets/images/default.jpg')}
-                  style={{ width: 35, height: 35 }}
-                  imageStyle={{ borderRadius:25 }}
-                  />
+                <TouchableOpacity 
+                    onPress={() => navigation.openDrawer()}
+                    // style={{ marginRight: 'auto' }}
+                    >
+                    <View style={styles.action}>
+                        <Feather name='menu' size={22} color="#094c37" />
+                    </View>
+                </TouchableOpacity>
+                     {/* <Text style={{fontWeight:'bold', fontSize:18, marginRight: 'auto'}}>สวัสดี, {userDetail.first_name}</Text> */}
+                {/* <TouchableOpacity onPress={() => navigation.openDrawer()}>
+                    <View style={styles.action}>
+                        <Feather name='bell' size={22} color="#094c37" />
+                    </View>
+                </TouchableOpacity> */}
+                {/* <TouchableOpacity  onPress={()=>navigation.navigate('Profile')} >
+                    <View style={styles.action}>
+                        <Feather name='user' size={22} color="#094c37" />
+                    </View>
+                </TouchableOpacity> */}
+                <TouchableOpacity  style={{ marginRight: 8 }}onPress={() => navigation.navigate('Profile')}>
+                    <ImageBackground 
+                    source={ require('../assets/images/default.jpg')}
+                    style={styles.avatar}
+                    imageStyle={{ borderRadius:25 }}
+                    />
                 </TouchableOpacity> 
             </View>
         );
@@ -236,26 +253,63 @@ const {userInfo} = useContext(AuthContext);
   
     function renderHeader() {
         return (
-            <View style={{  paddingTop:20, paddingHorizontal: 22, paddingBottom: 30, backgroundColor: '#FFFFFF' }}>
+            <View style={{  
+                            paddingVertical: 80, 
+                            marginHorizontal: 10, 
+                            marginVertical:10, 
+
+                             }}>
                 
                 <View style={{ alignItems: 'center' }}>
-
-                    <LottieView autoPlay={true}
-                                loop={true}
-                                style={{   marginTop: -10, height: 250, position:'absolute' }} 
-                                source={require('../assets/images/2576-circle-animation.json')}
-                                 /> 
-
-                        <TouchableOpacity   style={{  justifyContent: 'center', alignItems: 'center',
-                                                borderRadius: 200, height: 200,
-                                                width: 200, 
+                                <View style={{ justifyContent: 'center', 
+                    alignItems: 'center', top: -74, position:'absolute'}}>   
+                                    <LottieView autoPlay={true}
+                                        loop={true}
+                                        style={{  height: 250 }} 
+                                        source={require('../assets/images/2576-circle-animation.json')}
+                                    /> 
+                                 </View>
+                        
+                        <TouchableOpacity   style={{  
+                                                    justifyContent: 'center', 
+                                                    alignItems: 'center',
                                                 }}
                                             onPress={() => { dialCall() }}
                                     >
+                                     {/* {[...Array(3).keys()].map((index) => {
+                                    return (
+                                        <MotiView 
+                                        from={{
+                                            opacity: 0.7,
+                                            scale: 1,
+                                        }}
+                                        animate={{
+                                            scale: 2.7,
+                                            opacity: 0,
+                                        }}
+                                        transition={{
+                                            type: 'timing',
+                                            duration: 2000,
+                                            loop: true,
+                                            easing: Easing.out(Easing.ease),
+                                            delay: index * 500,
+                                            repeatReverse: false,
+                                        }}
+                                        key={index}
+                                        style={[
+                                        
+                                            StyleSheet.absoluteFillObject, 
+                                            styles.dot
+
+                                        ]}
+                                        
+                                        />
+                                    );
+                                })} */}
                             <Image  source={require('../assets/images/bus.png')} 
-                                    style={{ width: 110, height: 70 }} />
+                                    style={{ width: 110, height: 70, top: 2 }} />
                             <View style={{ marginTop:10 }}>
-                                <Text style={{ fontWeight:'bold', color: '#FFFFFF', fontSize:16 }}>เรียกรถพยาบาล</Text>
+                                <Text style={{ fontWeight: 600, color: '#FFF', fontSize:16 }}>เรียกรถพยาบาล</Text>
                             </View> 
                         </TouchableOpacity>
                 </View>
@@ -266,7 +320,7 @@ const {userInfo} = useContext(AuthContext);
     function renderCategoryList() {
         const renderItem = ({ item }) => (
             <TouchableOpacity
-            onPress={() =>  navigation.navigate('Profile') }
+            onPress={() =>  navigation.navigate('MenuList', { screen: item.url }) }
             
                 style={{
                     flex: 1,
@@ -274,8 +328,7 @@ const {userInfo} = useContext(AuthContext);
                     justifyContent: 'center', 
                     alignItems: 'center',
                     margin: 5,
-                    paddingVertical: 12,
-                    paddingHorizontal: 24,
+                    paddingVertical: 10,
                     borderRadius: 5,
                     backgroundColor: '#FFFFFF',
                 }}
@@ -319,9 +372,7 @@ const {userInfo} = useContext(AuthContext);
             {renderNavBar()}
             {renderHeader()}
             <SafeAreaView style={{flex: 1}}>
-            <View>
                 {renderCategoryList()}
-            </View>
             </SafeAreaView>
         </View>
         
@@ -330,3 +381,38 @@ const {userInfo} = useContext(AuthContext);
     }
     
 export default HomeScreen;
+
+const styles = StyleSheet.create({
+    actionWrapper: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        marginHorizontal: -8,
+
+    },
+    action: {
+        width: 48,
+        height: 48,
+        borderRadius: 12,
+        // marginHorizontal: 8,
+        alignItems: 'center',
+        justifyContent: 'center',
+        
+    },
+    avatar: {
+        width:25,
+        height: 25,
+        borderRadius: 12,
+        // marginHorizontal: 8,
+        alignItems: 'center',
+        justifyContent: 'center',
+        bottom:12
+        
+    },
+    dot: {
+        width: _size,
+        height: _size,
+        borderRadius:  _size,
+        backgroundColor: _color,
+    }
+});
